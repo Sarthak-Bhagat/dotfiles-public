@@ -204,7 +204,7 @@ DialogHeight=630
 DialogWidth=810
 
 [Containments][43][Wallpaper][org.kde.image][General]
-Image=file://$HOME/.config/variety/wallpaper/wallpaper-zoomed-ca27a96fbd24533603bc2d8f239b4897.jpg
+Image=file://$HOME/.config/variety/wallpaper/wallpaper-auto-rotated-f4f9decd69f8851e01c4d41bb7c99f07.jpg
 SlidePaths=/usr/share/wallpapers/
 
 [ScreenMapping]

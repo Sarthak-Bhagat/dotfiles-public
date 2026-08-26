@@ -1,4 +1,4 @@
-mpd_music_dir = $HOME/Music
+mpd_music_dir = ~/Music
 
 visualizer_data_source = "/tmp/mpd.fifo"
 visualizer_output_name = "my_fifo"

@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# Run by `yadm bootstrap`, or offered automatically after `yadm clone`.
+# Idempotent: every step checks before acting.
+set -uo pipefail
+say() { printf '\n\033[1m==> %s\033[0m\n' "$*"; }
+info() { printf '    %s\n' "$*"; }
+have() { command -v "$1" >/dev/null 2>&1; }
+
+REPO=(fish kitty eza bat fd ripgrep duf zoxide fzf direnv jq curl
+      mpd mpc rmpc ncmpcpp mpd-mpris mpv yt-dlp
+      mako variety kate xsettingsd wl-clipboard spectacle
+      btop fastfetch)
+AUR=(hellwal vicinae)
+
+if have pacman; then
+  say "Packages"
+  miss=(); for p in "${REPO[@]}"; do pacman -Qq "$p" >/dev/null 2>&1 || miss+=("$p"); done
+  ((${#miss[@]})) && { info "installing: ${miss[*]}"; sudo pacman -S --needed "${miss[@]}"; } || info "all present"
+  if have paru; then
+    miss=(); for p in "${AUR[@]}"; do pacman -Qq "$p" >/dev/null 2>&1 || miss+=("$p"); done
+    ((${#miss[@]})) && paru -S --needed "${miss[@]}" || info "AUR packages present"
+  else
+    info "paru not installed; hellwal and vicinae are AUR packages"
+  fi
+else
+  info "not an Arch system -- install the equivalents yourself"
+fi
+
+say "Fish plugins"
+if have fish; then
+  fish -c 'functions -q fisher' 2>/dev/null \
+    && fish -c 'fisher update' \
+    || fish -c 'curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher && fisher update'
+  [[ "$SHELL" == *fish ]] || info "to use it as your login shell: chsh -s $(command -v fish)"
+fi
+
+say "Directories mpd needs"
+mkdir -p ~/.config/mpd/playlists ~/.local/state/mpd ~/.cache/hellwal
+info "done"
+
+say "systemd user units"
+systemctl --user daemon-reload 2>/dev/null || true
+info "enable what you want: systemctl --user enable --now mpd mako"
+
+say "Before this feels right"
+cat <<'NEXT'
+    tide configure                     the fish prompt is not stored here
+    ~/.config/mpd/mpd.conf             music_directory points at ~/Music
+    ~/.config/variety/                 add your own wallpaper sources
+    KDE rc files                       panel layout and shortcuts are one
+                                       person's; review before logging out/in
+NEXT

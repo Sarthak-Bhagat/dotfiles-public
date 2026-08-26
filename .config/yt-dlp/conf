@@ -36,8 +36,8 @@
 --sponsorblock-remove "all"
 
 # Output
---output "$HOME/Documents/Media/Music/%(title)s.%(ext)s"
---download-archive "$HOME/.config/yt-dlp/archive.log"
+--output "~/Documents/Media/Music/%(title)s.%(ext)s"
+--download-archive "~/.config/yt-dlp/archive.log"
 
 # Playlist options
 --yes-playlist

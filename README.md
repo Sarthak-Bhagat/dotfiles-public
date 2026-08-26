@@ -1,35 +1,50 @@
-# dotfiles (shareable copy)
+# dotfiles
 
-CachyOS + KDE Plasma 6 config: fish, kitty, mpv, mpd, mako, hellwal theming, and
-a pile of Plasma rc files. Generated from a private yadm repo by
-`dotfiles-export`, with personal material stripped.
+CachyOS + KDE Plasma 6. fish, kitty, mpv, mpd, mako, and hellwal-driven theming
+that repaints the terminal and shell palette from the current wallpaper.
 
-## What was removed
+Managed with [yadm](https://yadm.io), so the repo is a `$HOME` overlay: paths in
+it are exactly where the files belong.
 
-Nothing here contains credentials, private hosts, or identity. Specifically
-excluded: git identity, SSH config, the media-server helpers and their ZeroTier
-addresses, Jellyfin and qBittorrent credentials, personal `.desktop` launchers,
-and hardware-specific config (input-remapper, monitor layout).
-
-Paths were rewritten to `$HOME`, so nothing points at another user's home.
-
-## Using it
-
-This is *not* a yadm repo — clone it somewhere and copy what you want:
+## Install
 
 ```bash
-git clone <this-repo> dotfiles && cd dotfiles
-cp -r .config/fish ~/.config/          # for example
+yadm clone https://github.com/Sarthak-Bhagat/dotfiles-public.git
+yadm bootstrap        # offered automatically after the clone
 ```
 
-Take pieces, not the whole tree. The Plasma rc files in particular encode one
-person's panel layout and shortcuts.
+`yadm clone` refuses to overwrite existing files, so it is safe to try — it will
+stash conflicts and tell you. `bootstrap` installs the packages, sets up fisher
+plugins, creates the directories mpd needs, and reloads systemd.
 
-## Worth reading first
+Prefer to take pieces? Clone it anywhere and copy what you want:
 
-- `.config/fish/conf.d/` — numbered, one concern per file
-- `.config/hellwal/templates/` — palette templates; the generated colour files
-  are deliberately not tracked
-- `.config/variety/scripts/` — KDE wallpaper setter, reduced from upstream's
-  fifteen desktop branches to the one that runs, with an upstream exit-code bug
-  fixed
+```bash
+git clone https://github.com/Sarthak-Bhagat/dotfiles-public.git
+cp -r dotfiles-public/.config/fish ~/.config/
+```
+
+## Worth stealing
+
+| Path | Why |
+|---|---|
+| `.config/fish/conf.d/` | numbered modules, one concern per file, loaded in order — much easier to reason about than one long `config.fish` |
+| `.config/hellwal/templates/` | palette templates. The generated colour files are deliberately not tracked, so nothing fights the generator |
+| `.config/variety/scripts/set_wallpaper` | upstream ships fifteen desktop branches; this is the KDE one, and it fixes an upstream bug where `$?` was read after a pipe, so the script exited 1 on every successful wallpaper change |
+| `.bin/textractor` | select a region, OCR it, put the text on the clipboard |
+| `.bin/songinfo` + `mpd_watcher.sh` | mpd notifications with album art, driven by `mpc idle` so they work with any client |
+| `.config/mpv/` | modernx UI, thumbfast, sponsorblock, playlistmanager |
+
+## What is not here
+
+Generated from a private repo, with anything personal removed: git identity,
+SSH config, credentials, private hosts, hardware-specific config, and personal
+launchers. Paths were rewritten to `~` or `%h`.
+
+Some things therefore need filling in — mpd points at `~/Music`, variety has no
+wallpaper sources configured, and the KDE rc files encode one person's panel
+layout, shortcuts and monitor arrangement. **Read those before you log out and
+back in**, or you will inherit a stranger's desktop.
+
+`.config/mpv/scripts/` omits the Discord rich-presence script, which needs a
+compiled binary not shipped here.
