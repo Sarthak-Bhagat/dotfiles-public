@@ -13,6 +13,26 @@ REPO=(fish kitty eza bat fd ripgrep duf zoxide fzf direnv jq curl
 AUR=(hellwal vicinae)
 
 if have pacman; then
+  say "CachyOS: mirrors, then a full system update"
+  # Rank mirrors first so the installs below are fast, and update before
+  # installing -- installing onto a stale system is a partial upgrade, which is
+  # the usual way to break an Arch box.
+  if have cachyos-rate-mirrors; then
+    info "ranking mirrors (needs root -- the script refuses to run as a user)"
+    sudo cachyos-rate-mirrors || info "rate-mirrors failed; keeping the existing mirrorlist"
+  else
+    info "cachyos-rate-mirrors absent -- not a CachyOS system, skipping"
+  fi
+  if have cachy-update; then
+    # A symlink to arch-update: interactive, runs as the user, escalates itself.
+    # Do not sudo it.
+    info "cachy-update (interactive -- it asks before applying)"
+    cachy-update || info "cachy-update failed; continuing"
+  else
+    info "cachy-update absent; using pacman instead"
+    sudo pacman -Syu --noconfirm || info "system update failed; continuing"
+  fi
+
   say "Packages"
   miss=(); for p in "${REPO[@]}"; do pacman -Qq "$p" >/dev/null 2>&1 || miss+=("$p"); done
   ((${#miss[@]})) && { info "installing: ${miss[*]}"; sudo pacman -S --needed "${miss[@]}"; } || info "all present"
