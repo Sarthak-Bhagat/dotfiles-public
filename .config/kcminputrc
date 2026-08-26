@@ -1,0 +1,19 @@
+[Keyboard]
+RepeatDelay=400
+RepeatRate=50
+
+[Libinput][1165][49557][ITE Tech. Inc. ITE Device(8258) Keyboard]
+NaturalScroll=false
+ScrollFactor=4
+
+[Libinput][1739][52990][SYNA2BA6:00 06CB:CEFE Mouse]
+PointerAcceleration=0.600
+ScrollFactor=12
+
+[Libinput][1739][52990][SYNA2BA6:00 06CB:CEFE Touchpad]
+NaturalScroll=false
+ScrollFactor=1.5
+TapDragLock=true
+
+[Mouse]
+cursorTheme=breeze_cursors

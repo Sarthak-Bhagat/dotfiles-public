@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# Variety wallpaper getter — KDE Plasma 6.
+#
+# Run once at startup so Variety knows what was on screen before it took over.
+# That is what lets History → Back restore the pre-Variety wallpaper.
+# Must print exactly one path (or file:// URI) and nothing else.
+#
+# Upstream prints every Image= match in the containment config, which can emit
+# several paths including stale or malformed ones. This walks matches
+# newest-first and returns the first that is a real file, so a bad entry is
+# skipped rather than breaking startup.
+
+set -uo pipefail
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/plasma-org.kde.plasma.desktop-appletsrc"
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/hellwal/wallpaper"
+
+if [ -r "$CONFIG" ]; then
+    while read -r wp; do
+        [ -n "$wp" ] && [ -f "$wp" ] || continue
+        printf '%s\n' "$wp"
+        exit 0
+    done < <(grep -oP '^Image=\K.*' "$CONFIG" | sed 's|^file://||' | tac)
+fi
+
+# Fall back to whatever set_wallpaper recorded last.
+if [ -r "$CACHE" ]; then
+    wp=$(cat "$CACHE")
+    [ -f "$wp" ] && { printf '%s\n' "$wp"; exit 0; }
+fi
+
+exit 1

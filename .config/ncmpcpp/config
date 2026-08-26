@@ -1,0 +1,27 @@
+mpd_music_dir = $HOME/Music
+
+visualizer_data_source = "/tmp/mpd.fifo"
+visualizer_output_name = "my_fifo"
+visualizer_in_stereo = "yes"
+visualizer_type = "spectrum"
+visualizer_look = "+|"
+
+# execute_on_song_change is deliberately unset. mpd-songinfo.service watches mpd
+# directly (mpc idle player -> ~/.bin/songinfo), so notifications work with any
+# client, including rmpc. Setting it here fired songinfo a second time whenever
+# ncmpcpp was open.
+
+ # Playlist
+ playlist_disable_highlight_delay = "0"
+ playlist_display_mode = "columns"
+ playlist_show_remaining_time = "yes"
+
+ browser_display_mode = "columns"
+
+ audio_output = {
+   type "fifo"
+   name "my_fifo"
+   path "/tmp/mpd.fifo"
+   format "44100:16:2"
+ }
+

@@ -1,0 +1,16 @@
+[Annotations]
+annotationToolType=4
+
+[General]
+autoSaveImage=true
+clipboardGroup=PostScreenshotCopyImage
+useReleaseToCapture=true
+
+[ImageSave]
+imageFilenameTemplate=<yyyy>-<MM>-<dd> <HH>_<mm>_<ss> <title>
+imageSaveLocation=file://$HOME/Documents/Syncthing/Screenshots
+lastImageSaveLocation=file:///tmp/tmp.J4bAOILmhE.png
+translatedScreenshotsFolder=Screenshots
+
+[VideoSave]
+translatedScreencastsFolder=Screencasts

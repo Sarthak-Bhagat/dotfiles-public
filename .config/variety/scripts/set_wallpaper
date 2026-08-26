@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+#
+# Variety wallpaper setter — KDE Plasma 6, with hellwal colour generation.
+#
+# Reduced to the KDE branch only. Upstream carries fifteen desktop branches;
+# none of the others can execute here. Variety only auto-upgrades this file if
+# it has never been modified, and adding hellwal modifies it, so nothing is
+# lost by trimming.
+#
+# PARAMETERS
+#   $1  wallpaper to display (after Variety's filters, clock, quotes)
+#   $2  "auto" | "manual" | "refresh"
+#   $3  original source image, before any processing
+#   $4  display mode
+#
+# UPSTREAM BUG FIXED HERE
+#   The original captures `dbus_exitcode="$?"` on the line *after* piping
+#   through grep, so it reads grep's status rather than dbus-send's. grep
+#   returns 1 when it matches nothing — which is the success case — so the
+#   script exits 1 on every successful wallpaper change. Anything appended
+#   after that point never runs.
+
+set -uo pipefail
+
+WP="$1"
+TRIGGER="${2:-auto}"
+ORIGINAL="${3:-$1}"
+
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/hellwal"
+
+# ---------------------------------------------------------------- set it
+read -r -d '' PLASMA_SCRIPT <<EOF || true
+let supported = ['org.kde.image', 'a2n.blur'];
+let unsupported = [];
+for (let d of desktops()) {
+    if (supported.includes(d.wallpaperPlugin)) {
+        d.currentConfigGroup = ['Wallpaper', d.wallpaperPlugin, 'General'];
+        d.writeConfig('Image', 'file://${WP}');
+    } else if (!unsupported.includes(d.wallpaperPlugin)) {
+        unsupported.push(d.wallpaperPlugin);
+    }
+}
+print(unsupported);
+EOF
+
+dbus_result=$(dbus-send --print-reply --type=method_call \
+    --dest=org.kde.plasmashell /PlasmaShell \
+    org.kde.PlasmaShell.evaluateScript string:"$PLASMA_SCRIPT" 2>&1)
+dbus_status=$?
+
+if [ "$dbus_status" -ne 0 ]; then
+    command -v kdialog >/dev/null 2>&1 && kdialog --title "Variety" \
+        --passivepopup "Could not set the Plasma wallpaper. Are widgets unlocked?" \
+        --icon variety 10
+    exit "$dbus_status"
+fi
+
+unsupported=$(printf '%s' "$dbus_result" | grep -oP '(?<=string ")[^"]+' || true)
+if [ -n "$unsupported" ] && command -v kdialog >/dev/null 2>&1; then
+    kdialog --title "Variety: unsupported wallpaper plugin" \
+        --passivepopup "Unsupported plugin: $unsupported. Add it to the supported list in $(readlink -f "$0")" \
+        --icon variety 20
+fi
+
+# ---------------------------------------------------------------- colours
+#
+# Generate from ORIGINAL, not WP. WP may be a processed copy in
+# ~/.config/variety/wallpaper/ which is replaced on every change, so a path
+# recorded from it is stale by the next wallpaper.
+#
+# Skipped on "refresh", which fires for clock and quote redraws where the
+# image has not actually changed.
+
+if [ "$TRIGGER" != "refresh" ] && command -v hellwal >/dev/null 2>&1; then
+    hellwal -i "$ORIGINAL" --dark --dark-offset 0.3 --neon-mode --check-contrast
+
+    mkdir -p "$CACHE_DIR"
+    printf '%s\n' "$ORIGINAL" > "$CACHE_DIR/wallpaper"
+    command -v fish >/dev/null 2>&1 && fish -c "set -Ux WALLPAPER '$ORIGINAL'" 2>/dev/null
+
+    # Live-reload open kitty windows. Requires in kitty.conf:
+    #   allow_remote_control yes
+    #   listen_on unix:/tmp/kitty-{kitty_pid}
+    if command -v kitty >/dev/null 2>&1 && [ -r "$CACHE_DIR/colors-kitty.conf" ]; then
+        for sock in /tmp/kitty-*; do
+            [ -S "$sock" ] || continue
+            kitty @ --to "unix:$sock" set-colors --all --configured \
+                "$CACHE_DIR/colors-kitty.conf" 2>/dev/null
+        done
+    fi
+fi
+
+exit 0
