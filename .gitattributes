@@ -1,0 +1,4 @@
+.local/share/vicinae/shortcuts/shortcuts.json filter=vicinae-shortcuts
+.config/kscreenlockerrc filter=kde-churn
+.config/plasma-org.kde.plasma.desktop-appletsrc filter=kde-churn
+.config/spectaclerc filter=kde-churn

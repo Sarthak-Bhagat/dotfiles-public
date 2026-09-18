@@ -26,7 +26,3 @@ alias nkitty     '$EDITOR ~/.config/kitty/kitty.conf'
 alias nfastfetch '$EDITOR ~/.config/fastfetch/config.jsonc'
 alias nmpv       '$EDITOR ~/.config/mpv/mpv.conf'
 alias nb         '$EDITOR ~/.bashrc'
-
-# docker / homelab
-alias ncompose '$EDITOR ~/Projects/arr-compose.yml'
-alias ncaddy   '$EDITOR ~/Projects/arr-caddy'

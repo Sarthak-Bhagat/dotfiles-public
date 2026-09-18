@@ -327,9 +327,7 @@ _launch=none
 
 [services][org.kde.spectacle.desktop]
 ActiveWindowScreenShot=Shift+Print\tMeta+Print
-CurrentMonitorScreenShot=none
 FullScreenScreenShot=none
-OpenWithoutScreenshot=none
 _launch=none
 
 [services][org.kde.touchpadshortcuts.desktop]

@@ -1,0 +1,24 @@
+
+
+fileinfo:
+    whitelist:
+    - /mnt/EXT/Movies
+    - /mnt/DATA/Documents/Media
+    - /mnt/EXT/Shows
+
+players:
+
+    mpv:
+        ipc_path: /tmp/mpvsocket
+    monitored: [mpv]
+
+general:
+    enable_notifs:
+        scrobble:
+            stop: no
+            resume: no
+            pause: no
+            start: no
+    notif_actions:
+        enabled: no
+version: '1.0'

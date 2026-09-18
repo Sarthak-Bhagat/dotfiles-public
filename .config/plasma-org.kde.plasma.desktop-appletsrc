@@ -141,7 +141,6 @@ immutability=1
 plugin=org.kde.plasma.volume
 
 [Containments][23][Applets][28][Applets][43][Configuration][General]
-currentTab=streams
 migrated=true
 
 [Containments][23][Applets][28][Applets][44]
@@ -204,7 +203,7 @@ DialogHeight=630
 DialogWidth=810
 
 [Containments][43][Wallpaper][org.kde.image][General]
-Image=file://$HOME/.config/variety/wallpaper/wallpaper-auto-rotated-7d52935b15b46660ef9c1179f21d7f20.jpg
+Image=file://$HOME/.config/variety/wallpaper/wallpaper-clock-2e397a8bdc0d024a4e19b0a3adaebfcd.jpg
 SlidePaths=/usr/share/wallpapers/
 
 [ScreenMapping]

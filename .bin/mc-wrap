@@ -1,0 +1,10 @@
+#!/bin/bash
+# Modrinth App wrapper hook — replicates what Prism did automatically:
+#   UseDiscreteGpu=true      -> prime-run (sets __NV_PRIME_RENDER_OFFLOAD,
+#                               __GLX_VENDOR_LIBRARY_NAME, __VK_LAYER_NV_optimus)
+#   EnableFeralGamemode=true -> gamemoderun
+#   JoinServerOnLaunch       -> --quickPlayMultiplayer (vanilla MC 1.20+)
+#
+# Only the Minecraft JVM is wrapped, never the launcher itself — wrapping the
+# launcher in prime-run broke its WebKitGTK window on 2026-09-17.
+exec gamemoderun prime-run "$@" --quickPlayMultiplayer mc.hypixel.net

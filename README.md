@@ -34,6 +34,8 @@ cp -r dotfiles-public/.config/fish ~/.config/
 | `.bin/textractor` | select a region, OCR it, put the text on the clipboard |
 | `.bin/songinfo` + `mpd_watcher.sh` | mpd notifications with album art, driven by `mpc idle` so they work with any client |
 | `.config/mpv/` | modernx UI, thumbfast, sponsorblock, playlistmanager |
+| `.gitattributes` + `.bin/yadm-clean-*` | git clean filters. Several KDE and app configs rewrite themselves constantly — wallpaper paths, usage counters, temp-file names — so tracking them means a permanently dirty repo. These normalise the volatile values on the way *into* git while leaving the working copy alone, so a real edit still shows a diff and the noise does not |
+| `.config/yadm/bootstrap` | every step checks before it acts, so it is safe to re-run. It also reinstalls the things that live outside `$HOME` and would otherwise be silently lost on a fresh clone — the gitleaks pre-commit hook and the clean filters above |
 
 ## What is not here
 

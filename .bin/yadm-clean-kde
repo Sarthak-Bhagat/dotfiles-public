@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# yadm clean filter for KDE configs that variety and spectacle rewrite constantly.
+#
+# Normalises volatile values on the way into the repo so the committed copy is
+# stable. Applies to kscreenlockerrc, plasma-org.kde.plasma.desktop-appletsrc
+# and spectaclerc (see ~/.gitattributes).
+#
+#   Image=                  variety rotates the wallpaper; the path is never a
+#                           setting you chose, so it carries no information.
+#   lastImageSaveLocation=  spectacle records the last screenshot's temp path.
+#
+# Deliberately NOT applied to kdeglobals: its churn is accent colours derived
+# from the wallpaper (accentColorFromWallpaper=true), and those share keys with
+# a real colour-scheme change. A filter wide enough to hide the churn would also
+# hide you changing your theme.
+sed -E \
+  -e 's|^Image=.*$|Image=yadm-normalised-wallpaper|' \
+  -e 's|^lastImageSaveLocation=file:///tmp/.*$|lastImageSaveLocation=file:///yadm-normalised|'

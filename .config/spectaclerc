@@ -9,7 +9,7 @@ useReleaseToCapture=true
 [ImageSave]
 imageFilenameTemplate=<yyyy>-<MM>-<dd> <HH>_<mm>_<ss> <title>
 imageSaveLocation=file://$HOME/Documents/Syncthing/Screenshots
-lastImageSaveLocation=file:///tmp/tmp.SwFCMvSoj3.png
+lastImageSaveLocation=file:///yadm-normalised
 translatedScreenshotsFolder=Screenshots
 
 [VideoSave]

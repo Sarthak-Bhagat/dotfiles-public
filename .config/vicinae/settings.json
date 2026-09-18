@@ -16,7 +16,7 @@
    "wrap_navigation": true,
    "encrypt_sensitive_data": true,
    "escape_key_behavior": "close_window",
-   "search_files_in_root": true,
+   "search_files_in_root": false,
    "font": {
       "normal": {
          "family": "FiraCode Nerd Font Mono Ret"
@@ -36,6 +36,11 @@
          "enabled": false
       }
    },
+   "fallbacks": [
+      "shortcuts:e06baecb-5871-4853-a1b8-dad9f8cf5277",
+      "shortcuts:f7cf1b1d-31b8-4ae6-b097-ddbca321bbf9",
+      "files:search"
+   ],
    "providers": {
       "scripts": {
          "preferences": {

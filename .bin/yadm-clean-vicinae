@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# yadm clean filter for vicinae's shortcuts.json.
+#
+# Vicinae rewrites this file on every use: registerVisit() bumps openCount and
+# sets lastUsedAt. Tracking it raw means a diff every time you search for
+# anything. This normalises those two fields on the way into the repo, so the
+# committed copy is stable and the working copy is left alone.
+#
+# updatedAt is deliberately NOT normalised - it only moves when a shortcut is
+# actually edited, so real changes still show up as a diff.
+exec jq --indent 2 'map(.openCount = 0 | del(.lastUsedAt))'
