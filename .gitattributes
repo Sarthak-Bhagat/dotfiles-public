@@ -1,4 +1,17 @@
+# Clean filters: normalise self-rewriting values on the way INTO the repo, so
+# files that churn stop producing diffs. The working copy is never touched.
+#
+# The filters themselves are ~/.bin/yadm-clean-*; what runs them lives in the
+# yadm repo's git config, which a fresh clone does not get -- bootstrap
+# re-registers them.
+#
+# GOTCHA: after adding a filter to a file that is already tracked and clean,
+# run `yadm add --renormalize <path>`. A plain `add` on an unmodified file is a
+# no-op -- git sees the stat matches the index, never hashes the content, and
+# the filter silently never runs.
+
 .local/share/vicinae/shortcuts/shortcuts.json filter=vicinae-shortcuts
 .config/kscreenlockerrc filter=kde-churn
 .config/plasma-org.kde.plasma.desktop-appletsrc filter=kde-churn
 .config/spectaclerc filter=kde-churn
+.config/dolphinrc filter=kde-churn

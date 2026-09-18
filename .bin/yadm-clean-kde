@@ -8,6 +8,7 @@
 #   Image=                  variety rotates the wallpaper; the path is never a
 #                           setting you chose, so it carries no information.
 #   lastImageSaveLocation=  spectacle records the last screenshot's temp path.
+#   ViewPropsTimestamp=     dolphin stamps this whenever view properties change.
 #
 # Deliberately NOT applied to kdeglobals: its churn is accent colours derived
 # from the wallpaper (accentColorFromWallpaper=true), and those share keys with
@@ -15,4 +16,5 @@
 # hide you changing your theme.
 sed -E \
   -e 's|^Image=.*$|Image=yadm-normalised-wallpaper|' \
-  -e 's|^lastImageSaveLocation=file:///tmp/.*$|lastImageSaveLocation=file:///yadm-normalised|'
+  -e 's|^lastImageSaveLocation=file:///tmp/.*$|lastImageSaveLocation=file:///yadm-normalised|' \
+  -e 's|^ViewPropsTimestamp=.*$|ViewPropsTimestamp=yadm-normalised|'
